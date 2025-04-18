@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Ensure it's imported correctly
+import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
 import { TextField, Button, Container, Typography } from "@mui/material";
 
@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send login request to backend
+      
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
         {
@@ -21,7 +21,7 @@ const Login = () => {
         }
       );
 
-      console.log("API Response:", response.data); // Debugging line
+      console.log("API Response:", response.data); 
 
       if (response.data && response.data.token) {
         // Store JWT token and user role
@@ -38,7 +38,7 @@ const Login = () => {
         setError("Invalid credentials or server error.");
       }
     } catch (err) {
-      console.error("Login failed:", err); // Log the error
+     
       setError("Login failed. Invalid credentials or server error.");
     }
   };

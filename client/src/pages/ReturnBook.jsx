@@ -10,7 +10,6 @@ const ReturnBook = () => {
     if (!bookName || !returnDate) {
       setError("All fields are required.");
     } else {
-     
       alert("Book returned successfully!");
     }
   };
@@ -30,7 +29,7 @@ const ReturnBook = () => {
             onChange={(e) => setBookName(e.target.value)}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12}>
           <TextField
             label="Return Date"
             variant="outlined"

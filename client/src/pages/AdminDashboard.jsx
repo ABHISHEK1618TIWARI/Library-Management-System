@@ -27,7 +27,10 @@ const AdminDashboard = () => {
             <Typography variant="h6" gutterBottom>
               User Management
             </Typography>
-            <Button variant="contained" onClick={() => navigate("/user-management")}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/user-management")}
+            >
               Go
             </Button>
           </Paper>
@@ -38,7 +41,10 @@ const AdminDashboard = () => {
             <Typography variant="h6" gutterBottom>
               Add Membership
             </Typography>
-            <Button variant="contained" onClick={() => navigate("/add-membership")}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/add-membership")}
+            >
               Go
             </Button>
           </Paper>
@@ -49,7 +55,10 @@ const AdminDashboard = () => {
             <Typography variant="h6" gutterBottom>
               Update Membership
             </Typography>
-            <Button variant="contained" onClick={() => navigate("/update-membership")}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/update-membership")}
+            >
               Go
             </Button>
           </Paper>

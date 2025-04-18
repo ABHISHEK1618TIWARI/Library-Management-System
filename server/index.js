@@ -1,9 +1,9 @@
-// server/index.js
+
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const auth = require("./routes/auth");
-const books = require("./routes/books"); // ✅ Add this
+const books = require("./routes/books"); // 
 const membershipRoutes = require("./routes/membership");
 
 const users = require("./models/User");

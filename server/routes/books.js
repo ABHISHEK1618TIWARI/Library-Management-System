@@ -1,8 +1,7 @@
-// server/routes/books.js
 
 const express = require("express");
 const router = express.Router();
-const db = require("../db"); // Adjust the path if necessary
+const db = require("../db");
 
 // Add Book
 router.post("/add", (req, res) => {
@@ -26,6 +25,21 @@ router.get("/search", (req, res) => {
   const query = `%${keyword}%`;
   db.query(sql, [query, query, query], (err, result) => {
     if (err) return res.status(500).json({ error: err });
+    res.json(result);
+  });
+});
+
+
+router.get("/available", (req, res) => {
+  const sql = "SELECT * FROM books WHERE available = 1";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("Error fetching available books:", err);
+      return res
+        .status(500)
+        .json({ message: "Error fetching available books" });
+    }
+    console.log(result); 
     res.json(result);
   });
 });
