@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { TextField, Button, Container, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  Paper,
+  Box,
+} from "@mui/material";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -12,23 +19,19 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "http://localhost:5000/userLogin/login", 
         {
           username,
           password,
         }
       );
 
-      console.log("API Response:", response.data); 
-
       if (response.data && response.data.token) {
-        // Store JWT token and user role
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userRole", response.data.user.role);
+        localStorage.setItem("userId", response.data.user.id);
 
-        // Navigate based on user role
         if (response.data.user.role === "admin") {
           navigate("/admin-dashboard");
         } else if (response.data.user.role === "user") {
@@ -38,40 +41,87 @@ const Login = () => {
         setError("Invalid credentials or server error.");
       }
     } catch (err) {
-     
       setError("Login failed. Invalid credentials or server error.");
     }
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Login
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Username"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+    <Box sx={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}>
+      <video
+        autoPlay
+        loop
+        muted
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: -1,
+        }}
+      >
+        <source
+          src="./video/istockphoto-1428407613-640_adpp_is.mp4"
+          type="video/mp4"
         />
-        <TextField
-          label="Password"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <Typography color="error">{error}</Typography>}
-        <Button variant="contained" color="primary" fullWidth type="submit">
-          Login
-        </Button>
-      </form>
-    </Container>
+      </video>
+
+      <Container
+        maxWidth="sm"
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Paper
+          elevation={6}
+          sx={{
+            p: 4,
+            borderRadius: 3,
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+          }}
+        >
+          <Typography variant="h4" gutterBottom align="center" color="primary">
+            Library Login
+          </Typography>
+          <form>
+            <TextField
+              label="Username"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {error && (
+              <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                {error}
+              </Typography>
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={handleSubmit}
+              type="submit"
+              sx={{ mt: 2 }}
+            >
+              Login
+            </Button>
+          </form>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

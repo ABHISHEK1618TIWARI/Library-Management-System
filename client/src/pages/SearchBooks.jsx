@@ -8,6 +8,7 @@ import {
   Paper,
   Divider,
 } from "@mui/material";
+import { Search, BookOpenCheck } from "lucide-react";
 import debounce from "lodash.debounce";
 
 const SearchBooks = () => {
@@ -30,7 +31,6 @@ const SearchBooks = () => {
   }, []);
 
   const fetchSuggestions = debounce(async (query) => {
-    if (!query) return;
     try {
       const res = await fetch(
         `http://localhost:5000/api/books/search?keyword=${query}`
@@ -39,17 +39,32 @@ const SearchBooks = () => {
       setSearchResults(data);
       setError("");
     } catch (err) {
-      setError("Error fetching suggestions");
+      setError("Error fetching search results.");
       console.error(err);
     }
   }, 300);
 
   const handleSearch = () => {
-    if (!searchQuery) {
-      setError("Please enter a book name or author.");
+    if (!searchQuery.trim()) {
+      setError("Please enter a book title or author name.");
       return;
     }
     fetchSuggestions(searchQuery);
+  };
+
+  const cardStyle = {
+    width: "100px",
+    maxWidth: "300px",
+    height: "160px",
+    mx: "auto",
+    p: 2,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    transition: "transform 0.2s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.02)",
+    },
   };
 
   return (
@@ -57,21 +72,23 @@ const SearchBooks = () => {
       <Typography
         variant="h4"
         gutterBottom
-        textAlign="center"
         fontWeight="bold"
+        textAlign="center"
       >
-        📚 Search & Explore Books
+        <Search size={30} style={{ verticalAlign: "middle", marginRight: 8 }} />
+        Search & Explore Books
       </Typography>
 
-      <Paper elevation={3} sx={{ p: 3, mb: 5 }}>
+      <Paper elevation={3} sx={{ p: 4, mb: 5 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
-              label="Search by Book Name or Author"
+              label="Search by Title or Author"
               variant="outlined"
               fullWidth
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
           </Grid>
           {error && (
@@ -84,27 +101,34 @@ const SearchBooks = () => {
               variant="contained"
               color="primary"
               fullWidth
-              onClick={handleSearch}
               size="large"
+              onClick={handleSearch}
+              sx={{ borderRadius: 2 }}
             >
-              🔍 Search
+              <Search style={{ marginRight: 8 }} />
+              Search
             </Button>
           </Grid>
         </Grid>
       </Paper>
 
       {searchQuery && (
-        <div>
-          <Typography variant="h5" gutterBottom>
+        <>
+          <Typography variant="h5" sx={{ mb: 2 }}>
             🔎 Search Results
           </Typography>
           <Grid container spacing={3}>
             {searchResults.length > 0 ? (
               searchResults.map((book, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Paper elevation={4} sx={{ p: 2, height: "100%" }}>
-                    <Typography variant="h6">{book.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">
+                  <Paper
+                    elevation={4}
+                    sx={{ ...cardStyle, backgroundColor: "#f9f9f9" }}
+                  >
+                    <Typography variant="h6" noWrap>
+                      {book.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" noWrap>
                       by {book.author}
                     </Typography>
                   </Paper>
@@ -116,29 +140,49 @@ const SearchBooks = () => {
               </Grid>
             )}
           </Grid>
-        </div>
+        </>
       )}
 
       <Divider sx={{ my: 5 }} />
 
-      <Typography variant="h5" gutterBottom>
-        ✅ Available Books
+      <Typography variant="h5" sx={{ mb: 2 }}>
+        <BookOpenCheck size={22} style={{ marginRight: 6 }} />
+        Available Books
       </Typography>
+
       <Grid container spacing={3}>
         {availableBooks.length > 0 ? (
           availableBooks.map((book, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <Paper elevation={4} sx={{ p: 2, height: "100%" }}>
-                <Typography variant="h6">{book.title}</Typography>
-                <Typography variant="body2" color="text.secondary">
+              <Paper
+                elevation={4}
+                sx={{
+                  ...cardStyle,
+                  borderLeft: "6px solid #4caf50",
+                  backgroundColor: "#f5fff7",
+                }}
+              >
+                <Typography variant="h6" noWrap>
+                  {book.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" noWrap>
                   by {book.author}
+                </Typography>
+                {/* Display the number of available pieces */}
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ marginTop: 1 }}
+                >
+                  Available Pieces: {book.available}{" "}
+                  {/* Add available pieces */}
                 </Typography>
               </Paper>
             </Grid>
           ))
         ) : (
           <Grid item xs={12}>
-            <Typography>No available books.</Typography>
+            <Typography>No available books at the moment.</Typography>
           </Grid>
         )}
       </Grid>

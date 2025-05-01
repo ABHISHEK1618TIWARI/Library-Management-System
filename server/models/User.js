@@ -1,27 +1,25 @@
-
-const express = require("express");
-const router = express.Router();
 const db = require("../db");
 
 // Fetch all users
-router.get("/", (req, res) => {
-  db.query("SELECT * FROM users", (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json(result);
-  });
-});
+const getAllUsers = (callback) => {
+  const sql = "SELECT * FROM users";
+  db.query(sql, callback);
+};
 
 // Add a new user
-router.post("/add", (req, res) => {
-  const { username, role } = req.body;
-  if (!username || !role)
-    return res.status(400).json({ message: "All fields are required" });
+const addUser = (username, password, role, callback) => {
+  const sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
+  db.query(sql, [username, password, role], callback);
+};
 
-  const sql = "INSERT INTO users (username, role) VALUES (?, ?)";
-  db.query(sql, [username, role], (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ message: "User added successfully." });
-  });
-});
+// Delete a user
+const deleteUser = (username, callback) => {
+  const sql = "DELETE FROM users WHERE username=?";
+  db.query(sql, [username], callback);
+};
 
-module.exports = router;
+module.exports = {
+  getAllUsers,
+  addUser,
+  deleteUser,
+};

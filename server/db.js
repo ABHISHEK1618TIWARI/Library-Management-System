@@ -1,4 +1,3 @@
-// db.js
 const mysql = require("mysql2");
 require("dotenv").config();
 
@@ -12,13 +11,12 @@ const db = mysql.createPool({
   queueLimit: 0,
 });
 
-
 db.getConnection((err, connection) => {
   if (err) {
     console.log("DB connection failed:", err);
   } else {
     console.log("DB connected");
-    connection.release(); 
+    connection.release();
   }
 });
 

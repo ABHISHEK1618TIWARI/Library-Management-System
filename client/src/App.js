@@ -12,14 +12,13 @@ import UserManagement from "./pages/UserManagement";
 import AddMembership from "./pages/AddMembership";
 import UpdateMembership from "./pages/UpdateMembership";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import UserProfile from "./pages/UserProfile";
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
 
-        {/* Admin Routes */}
         <Route
           path="/admin-dashboard"
           element={
@@ -61,7 +60,6 @@ const App = () => {
           }
         />
 
-        {/* User Routes */}
         <Route
           path="/user-dashboard"
           element={
@@ -99,6 +97,14 @@ const App = () => {
           element={
             <ProtectedRoute role="user">
               <FinePay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-profile"
+          element={
+            <ProtectedRoute role="user">
+              <UserProfile />
             </ProtectedRoute>
           }
         />
